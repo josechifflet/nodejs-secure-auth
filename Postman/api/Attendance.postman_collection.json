@@ -1,0 +1,1150 @@
+{
+	"info": {
+		"_postman_id": "2a744b9c-a7fc-42e1-93d4-a4eb83a2cf6f",
+		"name": "Attendance",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24932212"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Status",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/auth/status",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"Testuser12345\",\n    \"password\": \"59898123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/auth/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"Testuser1234\",\n    \"password\": \"59898123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/auth/logout",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"Testuser1234\",\n    \"email\": \"test+1@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/auth/forgot-password",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"forgot-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/auth/otp?media=email",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"otp"
+							],
+							"query": [
+								{
+									"key": "media",
+									"value": "email"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify OTP",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "378960",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "8a702209-d820-4b2b-ba6d-80c1283e129e",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/auth/otp",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"otp"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"Testuser12345\",\n    \"email\": \"test+2@gmail.com\",\n    \"phoneNumber\": \"59898123457\",\n    \"password\": \"59898123456\",\n    \"fullName\": \"Jose Pedro Chifflet\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/auth/register",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset password",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"newPassword\": \"59898123456\",\n    \"confirmPassword\": \"59898123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/auth/reset-password/74b3ae44a0e0f36c6f647f821ccc00173d2cc26e599d7ec5b607159b59fd04cb792dc0a8197f46c062abd0a324d32b6bf4869938ec9e943b3c8a7dd4e76fc51e",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"reset-password",
+								"74b3ae44a0e0f36c6f647f821ccc00173d2cc26e599d7ec5b607159b59fd04cb792dc0a8197f46c062abd0a324d32b6bf4869938ec9e943b3c8a7dd4e76fc51e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify email",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/auth/verify-email/b443bd53-e6dc-4575-bf10-c8cd7b9b7860/test+2@gmail.com",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"verify-email",
+								"b443bd53-e6dc-4575-bf10-c8cd7b9b7860",
+								"test+2@gmail.com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update password",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"currentPassword\": \"59898123456\",\n    \"newPassword\": \"159898123456\",\n    \"confirmPassword\": \"159898123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/auth/update-password",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"update-password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Attendances",
+			"item": [
+				{
+					"name": "Status",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/attendances/status",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"attendances",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Me",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/attendances/me",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"attendances",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "In",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ1c2VycyIsImV4cCI6MTY3NTM0ODE5OSwiaWF0IjoxNjc1MzQ3Mjk5LCJpc3MiOiJhcGkiLCJqdGkiOiJJMk94YzdPYzVtWERjSzBWaU05WnYiLCJuYmYiOjE2NzUzNDcyOTksInN1YiI6ImI2OWJhY2QxLTM5NTYtNDE4YS05N2MwLTc5ZThiZTQwM2IzMSJ9.qMMzP_KXRIKwBwLWbcWSFr5yerOeF9w10K2vcLyNfc1weLMOMQjbefV2SFNYe4dYYG01Ag3TZf3wFTGRrRc_Bg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"remarksEnter\":\"data\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/attendances/in",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"attendances",
+								"in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Out",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"remarksLeave\":\"asd\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/attendances/out",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"attendances",
+								"out"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin Get Attendances",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/attendances",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"attendances"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sessions",
+			"item": [
+				{
+					"name": "Me",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/sessions/me",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"sessions",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Self session invalidation",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/sessions/me/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"sessions",
+								"me",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "BvTIthTry1eNbOFZdh95nLvC8C8GtbOJ"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Me",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/users/me",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin Get user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update me",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test+1@gmail.com\",\n    \"phoneNumber\": \"59898123456\",\n    \"fullName\": \"Jose Pedro Chifflet\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/me",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deactivate user",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/users/me",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "Create new profile",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"59898123456\",\n    \"profilename\": \"MyProfile2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/profiles/me",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"profiles",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get my profiles",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/profiles/me",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"profiles",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a profile of my own by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/profiles/me/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"profiles",
+								"me",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "b8722a40-1816-49a4-81bd-e87906fc81a0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a profile of my own by id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"profilename\": \"MyProfile12\",\n    \"password\": \"59898123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/profiles/me/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"profiles",
+								"me",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "b8722a40-1816-49a4-81bd-e87906fc81a0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deactivate user",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/profiles/me/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"profiles",
+								"me",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "b8722a40-1816-49a4-81bd-e87906fc81a0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"Testuser12345\",\n    \"password\": \"59898123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/profiles/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"profiles",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-requested-with",
+								"value": "Postman",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"Testuser1234\",\n    \"password\": \"59898123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/profiles/logout",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"profiles",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Health",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-requested-with",
+						"value": "Postman",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{host}}/api/v1",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Graphql",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-requested-with",
+						"value": "Postman",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query {\n    hello\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{host}}/graphql",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
