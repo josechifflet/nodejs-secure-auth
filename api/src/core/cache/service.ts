@@ -1,9 +1,16 @@
+import { getCacheValue, setCacheValue } from './helper';
 import { CacheRepository } from './repository';
 
 /**
  * All services in Redis / cache are performed here.
  */
 class CacheServiceHandler {
+  public setArbitraryData = async (key: string, value: string) =>
+    setCacheValue(`arbitrary-data:${key}`, value);
+
+  public getArbitraryData = async (key: string, cachedSeconds: number) =>
+    getCacheValue(`arbitrary-data:${key}`, cachedSeconds);
+
   /**
    * Blacklists an OTP using Redis.
    *
@@ -108,13 +115,6 @@ class CacheServiceHandler {
 
     return sessions.map((s) => ({ ...s, cookie: undefined, ...s.sessionInfo }));
   };
-
-  /**
-   * Pings the cache.
-   *
-   * @returns Asynchronous 'PONG' string.
-   */
-  public ping = async () => CacheRepository.ping();
 
   /**
    * Sets or increments the number of attempts of a password reset of a user. Default

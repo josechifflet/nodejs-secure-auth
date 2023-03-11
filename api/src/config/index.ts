@@ -16,9 +16,11 @@ const config = {
   // Cookie.
   COOKIE_SECRET: get('COOKIE_SECRET').default('secretvalue').asString(),
 
-  // Databases.
-  DATABASE_URL: get('DATABASE_URL').required().asString(),
-  DOCUMENT_DB: get('DOCUMENT_DB_URL').required().asString(),
+  DB_DATABASE: get('DB_DATABASE').required().asString(),
+  DB_HOST: get('DB_HOST').required().asString(),
+  DB_PASSWORD: get('DB_PASSWORD').required().asString(),
+  DB_PORT: get('DB_PORT').required().asPortNumber(),
+  DB_USERNAME: get('DB_USERNAME').required().asString(),
 
   // Emails.
   EMAIL_FROM: get('EMAIL_FROM').required(isProd).asString(),
@@ -63,12 +65,6 @@ const config = {
 
   // Issuer of the TOTP.
   TOTP_ISSUER: get('TOTP_ISSUER').default('Dev').asString(),
-
-  DB_DATABASE: get('DB_DATABASE').required().asString(),
-  DB_HOST: get('DB_HOST').required().asString(),
-  DB_PASSWORD: get('DB_PASSWORD').required().asString(),
-  DB_PORT: get('DB_PORT').required().asPortNumber(),
-  DB_USERNAME: get('DB_USERNAME').required().asString(),
 };
 
 export default Object.freeze(config);

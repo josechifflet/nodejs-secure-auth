@@ -4,7 +4,6 @@ import path from 'path';
 import { renderFile } from 'pug';
 
 import config from '../../config';
-import bull from '../bull';
 
 /**
  * Class for method reusability. Email is usually pushed to a Bull queue
@@ -98,11 +97,9 @@ class Email {
    * @param url - URL to the webservice to activate the account.
    */
   async sendConfirmation(url: string) {
-    await bull.add(`email-confirmation-${this.to}`, {
-      task: this.send('Account Activation for Attendance', 'confirmation', {
-        name: this.name,
-        url,
-      }),
+    await this.send('Account Activation', 'confirmation', {
+      name: this.name,
+      url,
     });
   }
 
@@ -112,11 +109,9 @@ class Email {
    * @param url - URL to the webservice to reset the user's password.
    */
   async sendForgotPassword(url: string) {
-    await bull.add(`email-forgot-password-${this.to}`, {
-      task: this.send('Password Reset for Attendance', 'forgot-password', {
-        name: this.name,
-        url,
-      }),
+    await this.send('Password Reset', 'forgot-password', {
+      name: this.name,
+      url,
     });
   }
 
@@ -125,10 +120,8 @@ class Email {
    * Bull queue to prevent overhead.
    */
   async sendNotification() {
-    await bull.add(`email-notification-${this.to}`, {
-      task: this.send('Security Alert for Attendance', 'notification', {
-        name: this.name,
-      }),
+    await this.send('Security Alert', 'notification', {
+      name: this.name,
     });
   }
 
@@ -139,11 +132,9 @@ class Email {
    * @param otp - OTP as a string.
    */
   async sendOTP(otp: string) {
-    await bull.add(`email-otp-${this.to}`, {
-      task: this.send('Your requested OTP for Attendance', 'otp', {
-        otp,
-        name: this.name,
-      }),
+    await this.send('Your requested OTP', 'otp', {
+      otp,
+      name: this.name,
     });
   }
 
@@ -164,14 +155,8 @@ class Email {
    * their password. This is pushed into a Bull queue.
    */
   async sendResetPassword() {
-    await bull.add(`email-reset-password-${this.to}`, {
-      task: this.send(
-        'Password Reset Confirmation for Attendance',
-        'reset-password',
-        {
-          name: this.name,
-        }
-      ),
+    await this.send('Password Reset Confirmation', 'reset-password', {
+      name: this.name,
     });
   }
 
@@ -180,12 +165,8 @@ class Email {
    * to a new one.
    */
   async sendUpdatePassword() {
-    await bull.add(`email-update-password-${this.to}`, {
-      task: this.send(
-        'Your Attendance password has been changed',
-        'update-password',
-        { name: this.name }
-      ),
+    await this.send('Your password has been changed', 'update-password', {
+      name: this.name,
     });
   }
 }

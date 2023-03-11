@@ -1,9 +1,7 @@
 import type { NextFunction, Request, Response } from 'express';
 import rateLimiter from 'express-rate-limit';
-import RedisStore from 'rate-limit-redis';
 
 import AppError from '../../util/app-error';
-import redis from '../redis';
 
 /**
  * Prepares and configures a rate limiter to be used in endpoints to prevent SPAM.
@@ -13,14 +11,8 @@ import redis from '../redis';
  * @param minutes - Minutes for the rate limiter to be active. Defaults to 15.
  * @returns Rate limiter instance to be used as a middleware before each route.
  */
-const rateLimit = (max: number, prefix = 'common', minutes = 15) => {
-  const store = new RedisStore({
-    client: redis.nodeRedis,
-    prefix: `rl-${prefix}:`,
-  });
-
+const rateLimit = (max: number, _prefix = 'common', minutes = 15) => {
   return rateLimiter({
-    store,
     max, // max requests in 'windowMs'
     windowMs: minutes * 60 * 1000, // `minutes` number of minutes
     standardHeaders: true, // use `RateLimit-*` headers

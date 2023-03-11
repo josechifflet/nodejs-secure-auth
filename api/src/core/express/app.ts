@@ -35,6 +35,9 @@ class App {
     // Create Express application.
     this.app = express();
 
+    const apolloServer = await intializeApolloServer(this.app);
+    this.app.use('/graphql', json(), expressMiddleware(apolloServer));
+
     // Allow proxies on our nginx server in production.
     if (config.NODE_ENV === 'production') this.app.enable('trust proxy');
 
@@ -94,9 +97,6 @@ class App {
     this.app.use('/api/v1/attendances', attendanceRouter);
     this.app.use('/api/v1/sessions', sessionRouter);
     this.app.use('/api/v1/users', userRouter);
-
-    const apolloServer = await intializeApolloServer(this.app);
-    this.app.use('/graphql', json(), expressMiddleware(apolloServer));
 
     // Catch-all routes for API.
     this.app.all('*', notFound());

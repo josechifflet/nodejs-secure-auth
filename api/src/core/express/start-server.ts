@@ -1,12 +1,8 @@
 import express from 'express';
 
 import config from '../../config';
-import { mongooseInstance } from '../../db/mongoose-connection';
 import { typeormInstance } from '../../db/typeorm-connection';
-import { FirebaseAdmin } from '../../firebase';
 import tslog from '../../util/tslog';
-import bull from '../bull';
-import { CacheService } from '../cache/service';
 import { shutdownServer } from './shutdown-server';
 
 /**
@@ -20,24 +16,7 @@ export async function startServer(app: express.Application) {
     process.exit(1);
   });
 
-  // Provision all infrastructures and test connectivity.
-  const status = await Promise.all([
-    Promise.resolve(FirebaseAdmin.getInstance().connected),
-    CacheService.ping(),
-    bull.getMaxListeners(),
-    typeormInstance.connect(),
-    mongooseInstance.connect(),
-  ]);
-
-  const statusLog = {
-    firebase: status[0],
-    cache: status[1].toString() === 'PONG',
-    bull: status[2] > 0,
-    postgres: true,
-    mongoose: true,
-  };
-
-  tslog.info(`Status of infrastructures: \n ${JSON.stringify(statusLog)}.`);
+  await Promise.all([typeormInstance.connect()]);
 
   // Prepare server.
   const server = app.listen(config.PORT, () => {

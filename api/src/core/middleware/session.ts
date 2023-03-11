@@ -1,11 +1,11 @@
-import connectRedis from 'connect-redis';
 import type { NextFunction, Request, Response } from 'express';
 import type { CookieOptions } from 'express-session';
 import expressSession from 'express-session';
+import { TypeormStore } from 'typeorm-store';
 
 import config from '../../config';
+import { db } from '../../db';
 import isHTTPS from '../../util/is-https';
-import redis from '../redis';
 
 /**
  * Initializes a session middleware for use.
@@ -13,8 +13,6 @@ import redis from '../redis';
  * @returns An initialized Express Sessions middleware.
  */
 const session = () => (req: Request, res: Response, next: NextFunction) => {
-  const RedisStore = connectRedis(expressSession);
-
   const options: CookieOptions = {
     httpOnly: true,
     sameSite: 'strict',
@@ -29,7 +27,7 @@ const session = () => (req: Request, res: Response, next: NextFunction) => {
     : config.SESSION_COOKIE;
 
   return expressSession({
-    store: new RedisStore({ client: redis.nodeRedis }),
+    store: new TypeormStore({ repository: db.repositories.session }),
     name: cookie,
     saveUninitialized: false,
     resave: false,

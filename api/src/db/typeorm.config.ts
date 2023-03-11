@@ -3,8 +3,6 @@ import { DataSource } from 'typeorm';
 
 import config from '../config';
 
-console.log(path.resolve(__dirname, 'models/*.model.{.js,.ts}'));
-
 const { DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_DATABASE, NODE_ENV } =
   config;
 export const dbDataSource = new DataSource({

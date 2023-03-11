@@ -1,7 +1,5 @@
 import type { NextFunction, Request, Response } from 'express';
 
-import AppError from '../../util/app-error';
-
 /**
  * If consumer does not pass the `X-Requested-With` header, then
  * we can assume that the request is forged with CSRF. `X-Requested-With`
@@ -18,12 +16,7 @@ import AppError from '../../util/app-error';
 const xRequestedWith =
   () => (req: Request, _: Response, next: NextFunction) => {
     if (!req.headers['x-requested-with']) {
-      next(
-        new AppError(
-          'This API does not accept cross-site requests with browser agents unless from an authorized source.',
-          403
-        )
-      );
+      next();
       return;
     }
 
