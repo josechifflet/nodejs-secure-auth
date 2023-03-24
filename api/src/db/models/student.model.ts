@@ -13,12 +13,12 @@ import {
 @Entity({ name: 'student' })
 export class Student extends BaseEntity {
   @PrimaryGeneratedColumn()
-  studentPK: number;
+  PK: number;
 
   @Field(() => ID)
   @Column({ unique: true })
   @Generated('uuid')
-  studentID: string;
+  ID: string;
 
   @Field()
   @Column({ unique: true })

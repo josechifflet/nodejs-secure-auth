@@ -24,7 +24,10 @@ const ForbiddenPage = () => (
     >
       <MainHeading text="403 Forbidden!" />
 
-      <Text>You are not authorized to access this page.</Text>
+      <Text>
+        No tienes suficientes permisos para acceder a esta página. Por favor, si
+        es un error, contacta al administrador.
+      </Text>
 
       <NextLink href={routes.home} passHref>
         <Button

@@ -35,13 +35,13 @@ class AuthControllerHandler {
   public getStatus = async (req: Request, res: Response) => {
     try {
       // Check session.
-      if (!req.session.userID) {
+      if (!req.session.ID) {
         this.sendUserStatus(req, res, false, false, null);
         return;
       }
 
       // Make sure that the user exists in the database.
-      const user = await services.user.getUser({ userID: req.session.userID });
+      const user = await services.user.getUser({ ID: req.session.ID });
 
       if (!user) {
         this.sendUserStatus(req, res, false, false, null);
@@ -78,15 +78,15 @@ class AuthControllerHandler {
       }
 
       // Checks whether JTI exists or not in the cache.
-      const userID = await CacheService.getOTPSession(decoded.payload.jti);
-      if (!userID) {
+      const ID = await CacheService.getOTPSession(decoded.payload.jti);
+      if (!ID) {
         this.sendUserStatus(req, res, true, false, user);
         return;
       }
 
       // Check if JTI is equal to the current session, and ensure that the subject
       // is equal to the user ID as well.
-      if (req.session.userID !== userID || decoded.payload.sub !== userID) {
+      if (req.session.ID !== ID || decoded.payload.sub !== ID) {
         this.sendUserStatus(req, res, true, false, user);
       }
 
@@ -134,7 +134,7 @@ class AuthControllerHandler {
 
     // Ensure that the cache is not filled yet.
     const attempts = await CacheService.getForgotPasswordAttempts(
-      userByUsername.userID
+      userByUsername.ID
     );
     if (attempts && Number.parseInt(attempts, 10) === 2) {
       next(
@@ -165,7 +165,7 @@ class AuthControllerHandler {
 
     // Insert token to that user.
     await services.user.updateUser(
-      { userID: userByUsername.userID },
+      { ID: userByUsername.ID },
       { forgotPasswordCode: token }
     );
 
@@ -176,7 +176,7 @@ class AuthControllerHandler {
     ).sendForgotPassword(url);
 
     // Increment cache.
-    await CacheService.setForgotPasswordAttempts(userByUsername.userID);
+    await CacheService.setForgotPasswordAttempts(userByUsername.ID);
 
     // Send response.
     sendResponse({
@@ -228,7 +228,7 @@ class AuthControllerHandler {
     delete filteredUser.username;
     delete filteredUser.totpSecret;
     delete filteredUser.password;
-    delete filteredUser.userPK;
+    delete filteredUser.PK;
     delete filteredUser.confirmationCode;
     delete filteredUser.forgotPasswordCode;
 
@@ -239,7 +239,7 @@ class AuthControllerHandler {
       }
 
       // Set signed cookies with session information.
-      req.session.userID = user.userID;
+      req.session.ID = user.ID;
       req.session.lastActive = Date.now().toString();
       req.session.sessionInfo = getDeviceID(req);
       req.session.signedIn = Date.now().toString();
@@ -420,12 +420,12 @@ class AuthControllerHandler {
 
     // If passwords are the same, we update them.
     await services.user.updateUser(
-      { userID: user.userID },
+      { ID: user.ID },
       { password: newPassword, forgotPasswordCode: undefined }
     );
 
     // Destroy all sessions related to this user.
-    await CacheService.deleteUserSessions(user.userID);
+    await CacheService.deleteUserSessions(user.ID);
 
     // Send email to that user notifying that their password has been reset.
     await new Email(user.email, user.fullName).sendResetPassword();
@@ -459,22 +459,22 @@ class AuthControllerHandler {
    * @param next - Express.js's next function.
    */
   public sendOTP = async (req: Request, res: Response, next: NextFunction) => {
-    const { userID } = req.session;
+    const { ID } = req.session;
 
-    if (!userID) {
+    if (!ID) {
       next(new AppError('No session detected. Please log in again.', 401));
       return;
     }
 
     // Check the availability of the user.
-    const user = await services.user.getUserComplete({ userID });
+    const user = await services.user.getUserComplete({ ID });
     if (!user) {
       next(new AppError('User with this ID does not exist!', 404));
       return;
     }
 
     // If not yet expired, means that the user has asked in 'successive' order and it is a potential to spam.
-    if (await CacheService.getHasAskedOTP(userID)) {
+    if (await CacheService.getHasAskedOTP(ID)) {
       next(
         new AppError(
           'You have recently asked for an OTP. Please wait 30 seconds before we process your request again.',
@@ -502,7 +502,7 @@ class AuthControllerHandler {
     }
 
     // If using authenticator, do nothing as its already there, increment redis instead.
-    await CacheService.setHasAskedOTP(userID);
+    await CacheService.setHasAskedOTP(ID);
 
     // Send back response.
     sendResponse({
@@ -529,15 +529,15 @@ class AuthControllerHandler {
     res: Response,
     next: NextFunction
   ) => {
-    const { userID } = req.session;
+    const { ID } = req.session;
 
-    if (!userID) {
+    if (!ID) {
       next(new AppError('No session detected. Please log in again.', 401));
       return;
     }
 
     // Fetch current user.
-    const user = await services.user.getUserComplete({ userID });
+    const user = await services.user.getUserComplete({ ID });
     if (!user) {
       next(new AppError('There is no user with that ID.', 404));
       return;
@@ -546,7 +546,7 @@ class AuthControllerHandler {
     // Regenerate new MFA secret.
     const newSecret = await nanoid();
     const totp = generateDefaultTOTP(user.username, newSecret);
-    await services.user.updateUser({ userID }, { totpSecret: newSecret });
+    await services.user.updateUser({ ID }, { totpSecret: newSecret });
 
     // Send response.
     sendResponse({
@@ -575,15 +575,15 @@ class AuthControllerHandler {
     next: NextFunction
   ) => {
     const { currentPassword, newPassword, confirmPassword } = req.body;
-    const { userID } = req.session;
+    const { ID } = req.session;
 
-    if (!userID) {
+    if (!ID) {
       next(new AppError('No session detected. Please log in again.', 401));
       return;
     }
 
     // Fetch old data.
-    const user = await services.user.getUserComplete({ userID });
+    const user = await services.user.getUserComplete({ ID });
     if (!user) {
       next(new AppError('There is no user with that ID.', 404));
       return;
@@ -603,7 +603,7 @@ class AuthControllerHandler {
     }
 
     // Update new password.
-    await services.user.updateUser({ userID }, { password: newPassword });
+    await services.user.updateUser({ ID }, { password: newPassword });
 
     // Send a confirmation email that the user has successfully changed their password.
     await new Email(user.email, user.fullName).sendUpdatePassword();
@@ -617,9 +617,9 @@ class AuthControllerHandler {
         return;
       }
 
-      // Delete all of the sessions. We use 'user.userID' as 'req.session.userID'
+      // Delete all of the sessions. We use 'user.ID' as 'req.session.ID'
       // is not accessible anymore (already deleted in this callback).
-      await CacheService.deleteUserSessions(user.userID);
+      await CacheService.deleteUserSessions(user.ID);
 
       // Send back response.
       sendResponse({
@@ -667,7 +667,7 @@ class AuthControllerHandler {
 
     // Set 'isActive' to true and set code to not defined.
     const updatedUser = await services.user.updateUser(
-      { userID: user.userID },
+      { ID: user.ID },
       { isActive: true, email, confirmationCode: undefined }
     );
 
@@ -725,7 +725,7 @@ class AuthControllerHandler {
     }
 
     // Check whether username exists.
-    const user = await services.user.getUserComplete({ userID: username });
+    const user = await services.user.getUserComplete({ ID: username });
     if (!user) {
       this.invalidBasicAuth('User with that ID is not found.', 404, res, next);
       return;
@@ -733,11 +733,11 @@ class AuthControllerHandler {
 
     // If user has reached 3 times, then block the user's attempt.
     // TODO: should send email/sms/push notification to the relevant user
-    const attempts = await CacheService.getOTPAttempts(user.userID);
+    const attempts = await CacheService.getOTPAttempts(user.ID);
     if (attempts && Number.parseInt(attempts, 10) === 3) {
       // If user is not 'email-locked', send security alert to prevent spam.
-      if (!(await CacheService.getSecurityAlertEmailLock(user.userID))) {
-        await CacheService.setSecurityAlertEmailLock(user.userID);
+      if (!(await CacheService.getSecurityAlertEmailLock(user.ID))) {
+        await CacheService.setSecurityAlertEmailLock(user.ID);
         await new Email(user.email, user.fullName).sendNotification();
       }
 
@@ -751,9 +751,9 @@ class AuthControllerHandler {
     }
 
     // Ensures that OTP has never been used before.
-    const usedOTP = await CacheService.getBlacklistedOTP(user.userID, password);
+    const usedOTP = await CacheService.getBlacklistedOTP(user.ID, password);
     if (usedOTP) {
-      await CacheService.setOTPAttempts(user.userID);
+      await CacheService.setOTPAttempts(user.ID);
       this.invalidBasicAuth(
         'This OTP has expired. Please request it again in 30 seconds!',
         410,
@@ -766,7 +766,7 @@ class AuthControllerHandler {
     // Validate OTP.
     const validTOTP = validateDefaultTOTP(password, user.totpSecret);
     if (!validTOTP) {
-      await CacheService.setOTPAttempts(user.userID);
+      await CacheService.setOTPAttempts(user.ID);
       this.invalidBasicAuth(
         'Invalid authentication, wrong OTP code.',
         401,
@@ -777,14 +777,14 @@ class AuthControllerHandler {
     }
 
     // Make sure to blacklist the TOTP (according to the specs).
-    await CacheService.blacklistOTP(user.userID, password);
+    await CacheService.blacklistOTP(user.ID, password);
 
     // Generate JWS as the authorization ticket.
     const jti = await nanoid();
-    const token = await signJWS(jti, user.userID);
+    const token = await signJWS(jti, user.ID);
 
     // Set OTP session by its JTI.
-    await CacheService.setOTPSession(jti, user.userID);
+    await CacheService.setOTPSession(jti, user.ID);
 
     // Set cookie for the JWS.
     setCookie({

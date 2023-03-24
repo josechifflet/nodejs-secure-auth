@@ -89,7 +89,7 @@ const OTPModal = ({ isOpen, onClose, user }: Props) => {
     axios({
       method: 'PUT',
       url: '/api/v1/auth/otp',
-      auth: { username: user.userID, password: otp },
+      auth: { username: user.ID, password: otp },
     })
       .then((res) => {
         // Show feedback.

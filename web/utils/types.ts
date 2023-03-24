@@ -22,7 +22,7 @@ export interface Response<T> {
  * Attendance response from the back-end.
  */
 export type Attendance = {
-  attendanceID: string;
+  ID: string;
   timeEnter: string;
   ipAddressEnter: string;
   deviceEnter: string;
@@ -32,7 +32,7 @@ export type Attendance = {
   deviceLeave: string | null;
   remarksLeave: string | null;
   user: {
-    userID: string;
+    ID: string;
     fullName: string;
   };
 };
@@ -59,7 +59,7 @@ export type Status = {
  * Session type from the back-end.
  */
 export type Session = {
-  userID: string;
+  ID: string;
   lastActive: string;
   sessionInfo: {
     device: string;
@@ -73,7 +73,7 @@ export type Session = {
  * User type from the back-end.
  */
 export type User = {
-  userID: string;
+  ID: string;
   email: string;
   phoneNumber: string;
   fullName: string;
@@ -82,3 +82,17 @@ export type User = {
   createdAt: string;
   role: 'admin' | 'user';
 };
+
+// types.ts
+export interface Ticket {
+  id: number;
+  title: string;
+  description: string;
+  status: 'todo' | 'in-progress' | 'done';
+}
+
+export interface ColumnType {
+  id: string;
+  title: string;
+  tickets: Ticket[];
+}

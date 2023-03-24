@@ -32,13 +32,13 @@ class AppDocument extends Document {
 
           <meta
             name="description"
-            content="The front-end implementation of Attendance, a proof of concept to show the security of a REST API that conforms to JSON:API and OWASP specifications."
+            content="Composer, Eduvaluer, all rights reserved."
           />
 
-          <meta property="og:title" content="Attendance" />
+          <meta property="og:title" content="Composer" />
           <meta
             property="og:description"
-            content="The front-end implementation of Attendance, a proof of concept to show the security of a REST API that conforms to JSON:API and OWASP specifications."
+            content="Composer, Eduvaluer, all rights reserved."
           />
           <meta property="og:url" content="https://www.fumi-no.com" />
           <meta property="og:image" content="https://www.fumi-no.com/seo.jpg" />
@@ -46,7 +46,7 @@ class AppDocument extends Document {
           <meta property="og:image:width" content="512" />
           <meta property="og:image:height" content="512" />
           <meta property="og:locale" content="en_US" />
-          <meta property="og:site_name" content="Attendance" />
+          <meta property="og:site_name" content="Composer" />
         </Head>
         <body>
           <Main />

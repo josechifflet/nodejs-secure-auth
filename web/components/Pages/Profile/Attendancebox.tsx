@@ -20,10 +20,7 @@ const Attendancebox = ({ attendances }: { attendances: Attendance[] }) => (
     {attendances.length ? (
       <Grid templateColumns={['1fr', 'repeat(2, 1fr)']} gap={3} w="full" mt={5}>
         {attendances.map((attendance) => (
-          <AttendanceCard
-            key={attendance.attendanceID}
-            attendance={attendance}
-          />
+          <AttendanceCard key={attendance.ID} attendance={attendance} />
         ))}
       </Grid>
     ) : (

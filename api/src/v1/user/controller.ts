@@ -85,12 +85,12 @@ class UserControllerHandler {
   ) => {
     const { id } = req.params;
 
-    if (!(await services.user.getUser({ userID: id }))) {
+    if (!(await services.user.getUser({ ID: id }))) {
       next(new AppError('The user with this ID does not exist!', 404));
       return;
     }
 
-    await services.user.updateUser({ userID: id }, { isActive: false });
+    await services.user.updateUser({ ID: id }, { isActive: false });
 
     // Delete all of their sessions.
     req.session.destroy(async (err) => {
@@ -118,15 +118,15 @@ class UserControllerHandler {
   ) => {
     const { id } = req.params;
 
-    if (!(await services.user.getUser({ userID: id }))) {
+    if (!(await services.user.getUser({ ID: id }))) {
       next(new AppError('The user with this ID does not exist!', 404));
       return;
     }
 
-    await services.user.deleteUser({ userID: id });
+    await services.user.deleteUser({ ID: id });
 
     // Delete all of their sessions.
-    if (req.session.userID !== id) {
+    if (req.session.ID !== id) {
       await CacheService.deleteUserSessions(id);
       res.status(204).send();
       return;
@@ -151,7 +151,7 @@ class UserControllerHandler {
    * @param res - Express.js's response object.
    */
   public getUser = async (req: Request, res: Response) => {
-    const user = await services.user.getUser({ userID: req.params.id });
+    const user = await services.user.getUser({ ID: req.params.id });
 
     sendResponse({
       req,
@@ -204,7 +204,7 @@ class UserControllerHandler {
     // Validate everything via 'Promise.all' for speed.
     const [userByID, userByUsername, userByEmail, userByPhone] =
       await Promise.all([
-        services.user.getUser({ userID: id }),
+        services.user.getUser({ ID: id }),
         username ? services.user.getUser({ username }) : null,
         email ? services.user.getUser({ email }) : null,
         phoneNumber ? services.user.getUser({ phoneNumber }) : null,
@@ -216,24 +216,24 @@ class UserControllerHandler {
       return;
     }
 
-    if (userByUsername && userByUsername.userID !== id) {
+    if (userByUsername && userByUsername.ID !== id) {
       next(new AppError('This username has been used by another user!', 400));
       return;
     }
 
-    if (userByEmail && userByEmail.userID !== id) {
+    if (userByEmail && userByEmail.ID !== id) {
       next(new AppError('This email has been used by another user!', 400));
       return;
     }
 
-    if (userByPhone && userByPhone.userID !== id) {
+    if (userByPhone && userByPhone.ID !== id) {
       next(new AppError('This number has been used by another user!', 400));
       return;
     }
 
     // Everything is optional and sanitized according to the previous validation layer.
     const user = await services.user.updateUser(
-      { userID: id },
+      { ID: id },
       {
         username,
         email,

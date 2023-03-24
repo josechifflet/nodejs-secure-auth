@@ -4,6 +4,7 @@ import '@fontsource/nunito/400.css';
 import '@fontsource/nunito/700.css';
 import '@fontsource/nunito/800.css';
 import 'focus-visible/dist/focus-visible';
+import '../styles/globals.css';
 
 import type { ThemeOverride } from '@chakra-ui/react';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
@@ -11,9 +12,10 @@ import { mode } from '@chakra-ui/theme-tools';
 import type { AppProps } from 'next/app';
 import Router from 'next/router';
 import NProgress from 'nprogress';
+import { Provider } from 'react-redux';
 
 import AuthRoute from '../components/AuthRoute';
-import AdminRoute from '../components/Pages/Admin/AdminRoute';
+import store from '../store';
 import routes from '../utils/routes';
 
 /**
@@ -26,16 +28,11 @@ const fallbackFonts =
  * All protected routes that require authentication.
  */
 const protectedRoutes = [
-  routes.admin,
   routes.profile,
-  routes.attendances,
-  routes.users,
+  routes.drafts,
+  routes.groups,
+  routes.students,
 ];
-
-/**
- * All protected routes that require admin authorization.
- */
-const adminRoutes = [routes.admin, routes.attendances, routes.users];
 
 /**
  * Default listeners for router events.
@@ -52,61 +49,37 @@ Router.events.on('routeChangeError', () => NProgress.done());
  */
 const App = ({ Component, pageProps }: AppProps) => {
   return (
-    <ChakraProvider
-      resetCSS
-      theme={extendTheme({
-        styles: {
-          global: (props) => ({
-            '::selection': {
-              backgroundColor: '#945bf170',
-              color: '#fff',
-            },
+    <Provider store={store}>
+      <ChakraProvider
+        resetCSS
+        theme={extendTheme({
+          styles: {
+            global: (props) => ({
+              body: {
+                bg: mode('#f3f3f3', 'gray.800')(props),
+              },
+            }),
+          },
 
-            // Override theme colors.
-            body: {
-              bg: mode('#f3f3f3', 'gray.800')(props),
-            },
+          // Override default fonts.
+          fonts: {
+            body: `Inter, ${fallbackFonts}`,
+            heading: `Nunito, ${fallbackFonts}`,
+          },
 
-            // NProgress.
-            '#nprogress': {
-              pointerEvents: 'none',
-            },
-            '#nprogress .bar': {
-              bgGradient: 'linear(to-r, whiteAlpha.400, blue.200)',
-              h: '2px',
-              left: 0,
-              pos: 'fixed',
-              top: 0,
-              w: 'full',
-              zIndex: 2000,
-            },
-            '.nprogress-custom-parent': {
-              overflow: 'hidden',
-              position: 'absolute',
-            },
-          }),
-        },
-
-        // Override default fonts.
-        fonts: {
-          body: `Inter, ${fallbackFonts}`,
-          heading: `Nunito, ${fallbackFonts}`,
-        },
-
-        // Set default to light mode and use system color.
-        config: {
-          initialColorMode: 'system',
-          useSystemColorMode: true,
-          disableTransitionOnChange: false,
-        },
-      } as ThemeOverride)}
-    >
-      <AuthRoute authRoutes={protectedRoutes}>
-        <AdminRoute adminRoutes={adminRoutes}>
+          // Set default to light mode and use system color.
+          config: {
+            initialColorMode: 'system',
+            useSystemColorMode: true,
+            disableTransitionOnChange: false,
+          },
+        } as ThemeOverride)}
+      >
+        <AuthRoute authRoutes={protectedRoutes}>
           <Component {...pageProps} />
-        </AdminRoute>
-      </AuthRoute>
-    </ChakraProvider>
+        </AuthRoute>
+      </ChakraProvider>
+    </Provider>
   );
 };
 

@@ -12,7 +12,7 @@ import { hashPassword } from '../util/passwords';
  * this is intentional as we do not want sensitive values to be fetched and exposed to the end user.
  */
 const select: FindOptionsSelect<User> = {
-  userID: true,
+  ID: true,
   email: true,
   phoneNumber: true,
   fullName: true,
@@ -91,7 +91,7 @@ class UserService {
 
     // Retrieve the created user
     const createdUser = await db.repositories.user.findOneByOrFail({
-      userPK: newUser.userPK,
+      PK: newUser.PK,
     });
 
     // Generates a TOTP based on that user, but do not expose them yet. Only fetch the URI.

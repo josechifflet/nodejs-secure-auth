@@ -1,9 +1,9 @@
-import { chakra, Flex } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { memo, ReactNode } from 'react';
 
-import Footer from './Footer';
+import { useStatusAndUser } from '../../utils/hooks';
 import Head from './Head';
-import Header from './Header';
+import SidebarWithHeader from './SidebarWithHeader';
 
 /**
  * Props typing that will handle below component's hydration process.
@@ -21,20 +21,26 @@ type Props = {
  * @param Props - Items to hydrate the component with.
  * @returns React Functional Component.
  */
-const Layout = ({ children, title }: Props) => (
-  <>
-    <Head title={title} />
+const Layout = ({ children, title }: Props) => {
+  const { status } = useStatusAndUser();
 
-    <Flex h="100vh" direction="column" maxW="1700px" mx="auto">
-      <Header />
+  return (
+    <>
+      <Head title={title} />
 
-      <chakra.div as="main" p={4} flex={1} mt={5} mb={5}>
-        {children}
-      </chakra.div>
+      {status && status.isAuthenticated && (
+        <Flex h="90vh" direction="column">
+          <SidebarWithHeader>{children}</SidebarWithHeader>
+        </Flex>
+      )}
 
-      <Footer />
-    </Flex>
-  </>
-);
+      {status && !status.isAuthenticated && (
+        <Flex h="90vh" direction="column">
+          {children}
+        </Flex>
+      )}
+    </>
+  );
+};
 
 export default memo(Layout);

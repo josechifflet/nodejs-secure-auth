@@ -13,16 +13,16 @@ import getDeviceID from '../../util/device-id';
  * @param next - Express.js's next function.
  */
 const hasSession = async (req: Request, _: Response, next: NextFunction) => {
-  const { userID } = req.session;
+  const { ID } = req.session;
 
   // Validates whether the session exists or not.
-  if (!userID) {
+  if (!ID) {
     next(new AppError('You are not logged in yet! Please log in first!', 401));
     return;
   }
 
   // Check in an unlikely scenario: a user has already deleted his account but their session is still active.
-  const user = await services.user.getUser({ userID });
+  const user = await services.user.getUser({ ID });
   if (!user) {
     next(new AppError('User belonging to this session does not exist.', 400));
     return;

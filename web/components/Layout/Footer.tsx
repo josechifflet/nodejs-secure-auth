@@ -14,18 +14,10 @@ const Footer = () => (
       _hover={{ textDecor: 'none', color: 'orange.400' }}
       isExternal
     >
-      &copy; {new Date().getFullYear()} - Nicholas
+      &copy; {new Date().getFullYear()} - Eduvaluer
     </Link>
 
     <Spacer />
-
-    <Link href="https://github.com/lauslim12/attendance" isExternal>
-      <IconButton
-        aria-label="Access repository"
-        icon={<FaGithub />}
-        variant="ghost"
-      />
-    </Link>
   </HStack>
 );
 

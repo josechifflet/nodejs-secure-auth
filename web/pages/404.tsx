@@ -25,8 +25,8 @@ const NotFoundPage = () => (
       <MainHeading text="404 Page Not Found!" />
 
       <Text>
-        Oops. The page you are looking may or may not have existed in the past,
-        but it certainly does not now.
+        La página que estás buscando puede o no haber existido en el pasado,
+        pero, con toda seguridad, no existe ahora.
       </Text>
 
       <NextLink href={routes.home} passHref>

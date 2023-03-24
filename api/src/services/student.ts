@@ -9,7 +9,7 @@ import { Student } from '../db/models/student.model';
  * this is intentional as we do not want sensitive values to be fetched and exposed to the end student.
  */
 const select: FindOptionsSelect<Student> = {
-  studentID: true,
+  ID: true,
   email: true,
   birthday: true,
   firstName: true,
@@ -80,7 +80,7 @@ class StudentService {
 
     // Retrieve the created student
     const createdStudent = await db.repositories.student.findOneByOrFail({
-      studentPK: newStudent.studentPK,
+      PK: newStudent.PK,
     });
 
     // Return all objects.

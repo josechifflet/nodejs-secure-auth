@@ -9,11 +9,9 @@ const routes = {
   profile: '/profile',
   resetPassword: '/reset-password',
   verifyEmail: '/verify-email',
-
-  // Admin routes.
-  admin: '/admin',
-  attendances: '/admin/attendances',
-  users: '/admin/users',
+  drafts: '/drafts',
+  students: '/students',
+  groups: '/groups',
 
   // Utility routes.
   robots: '/robots.txt',

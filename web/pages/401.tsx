@@ -25,7 +25,8 @@ const UnauthorizedPage = () => (
       <MainHeading text="401 Unauthorized!" />
 
       <Text>
-        Oops. You are not authorized to access this page. Please log in first.
+        No tienes suficientes permisos para acceder a esta página. Por favor,
+        inicia sesión primero.
       </Text>
 
       <NextLink href={routes.home} passHref>

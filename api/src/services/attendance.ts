@@ -15,7 +15,7 @@ import { Attendance } from '../db/models/attendance.model';
  * as secrets and/or passwords.
  */
 const select: FindOptionsSelect<Attendance> = {
-  attendanceID: true,
+  ID: true,
   timeEnter: true,
   ipAddressEnter: true,
   deviceEnter: true,
@@ -24,7 +24,7 @@ const select: FindOptionsSelect<Attendance> = {
   ipAddressLeave: true,
   deviceLeave: true,
   remarksLeave: true,
-  user: { userID: true, fullName: true },
+  user: { ID: true, fullName: true },
 };
 
 /**
@@ -49,17 +49,17 @@ class AttendanceService {
    * is between today and tomorrow (based on arguments).
    *
    * @param date - Current date as a 'Date' object.
-   * @param userID - A user's ID.
+   * @param ID - A user's ID.
    * @param type - A type to check the attendance, based on 'timeEnter' or 'timeLeave'.
    * @returns A single attendance object.
    */
-  public checked = async (date: Date, userID: string, type: 'in' | 'out') => {
+  public checked = async (date: Date, ID: string, type: 'in' | 'out') => {
     const tomorrow = new Date(new Date().setDate(new Date().getDate() + 1));
 
     if (type === 'in') {
       return db.repositories.attendance.findOne({
         where: {
-          user: { userID },
+          user: { ID },
           timeEnter: Between(formatDate(date), formatDate(tomorrow)),
         },
       });
@@ -67,7 +67,7 @@ class AttendanceService {
 
     return db.repositories.attendance.findOneOrFail({
       where: {
-        user: { userID },
+        user: { ID },
         timeLeave: Between(formatDate(date), formatDate(tomorrow)),
       },
     });
@@ -80,9 +80,9 @@ class AttendanceService {
    * @returns The created attendance data.
    */
   public createAttendance = async (data: DeepPartial<Attendance>) => {
-    const { attendancePK } = await db.repositories.attendance.save(data);
+    const { PK } = await db.repositories.attendance.save(data);
     return db.repositories.attendance.findOneOrFail({
-      where: { attendancePK },
+      where: { PK },
       select,
     });
   };
@@ -100,7 +100,7 @@ class AttendanceService {
         order: {
           timeEnter: 'DESC',
           timeLeave: 'DESC',
-          attendancePK: 'DESC',
+          PK: 'DESC',
         },
       });
     }
@@ -111,7 +111,7 @@ class AttendanceService {
       order: {
         timeEnter: 'DESC',
         timeLeave: 'DESC',
-        attendancePK: 'DESC',
+        PK: 'DESC',
       },
     });
   };

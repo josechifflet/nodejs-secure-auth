@@ -17,10 +17,10 @@ const Head = ({ title }: { title?: string[] }) => (
 
     <title>
       {title
-        ? [...title.map((x) => x?.trim()).filter((x) => x), 'Attendance'].join(
+        ? [...title.map((x) => x?.trim()).filter((x) => x), 'Composer'].join(
             ' · '
           )
-        : 'Attendance'}
+        : 'Composer'}
     </title>
   </NextHead>
 );

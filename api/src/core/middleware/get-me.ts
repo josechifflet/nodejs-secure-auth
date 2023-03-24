@@ -10,12 +10,12 @@ import AppError from '../../util/app-error';
  * @param next - Express.js's next function.
  */
 const getMe = (req: Request, _: Response, next: NextFunction) => {
-  if (!req.session.userID) {
+  if (!req.session.ID) {
     next(new AppError('No session detected. Please log in again!', 401));
     return;
   }
 
-  req.params.id = req.session.userID;
+  req.params.id = req.session.ID;
   next();
 };
 

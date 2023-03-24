@@ -21,7 +21,7 @@ async function main() {
     users.map(async (user) => {
       const hasCheckedIn = await AttendanceService.checked(
         today,
-        user.userID,
+        user.ID,
         'in'
       );
       if (!hasCheckedIn) {
@@ -30,7 +30,7 @@ async function main() {
 
       const hasCheckedOut = await AttendanceService.checked(
         today,
-        user.userID,
+        user.ID,
         'out'
       );
       if (hasCheckedOut) {

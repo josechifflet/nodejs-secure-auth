@@ -157,13 +157,11 @@ class CacheRepositoryHandler {
   /**
    * Deletes all sessions related to this user.
    *
-   * @param userID - User ID.
+   * @param ID - User ID.
    * @returns Asynchronous numbers, which are the responses returned from Redis.
    */
-  deleteUserSessions = async (userID: string) => {
-    const sessions = (await this.allSessions()).filter(
-      (s) => s.userID === userID
-    );
+  deleteUserSessions = async (ID: string) => {
+    const sessions = (await this.allSessions()).filter((s) => s.ID === ID);
 
     return Promise.all(sessions.map(async (s) => this.deleteSession(s.id)));
   };
@@ -178,11 +176,11 @@ class CacheRepositoryHandler {
   /**
    * Fetches all sessions that are specific to a single user.
    *
-   * @param userID - User ID.
+   * @param ID - User ID.
    * @returns All sessions specific to a single user.
    */
-  getUserSessions = async (userID: string) =>
-    (await this.allSessions()).filter((sess) => sess.userID === userID);
+  getUserSessions = async (ID: string) =>
+    (await this.allSessions()).filter((sess) => sess.ID === ID);
 
   /**
    * Fetches all related data that matches to an expression in Session Table. Usually

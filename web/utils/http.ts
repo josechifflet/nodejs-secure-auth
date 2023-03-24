@@ -8,7 +8,7 @@ import type { Response } from './types';
  */
 const instance = axiosClient.create({
   headers: {
-    Accept: 'application/vnd.nicholasdw.v1+json',
+    Accept: 'application/json',
     'Content-Type': 'application/json; charset=utf-8',
     'X-Requested-With': 'axios',
   },
@@ -53,7 +53,7 @@ const axios = <T = unknown>(cfg: AxiosRequestConfig) =>
 export const fetcher = async (url: string) => {
   const res = await fetch(url, {
     headers: {
-      Accept: 'application/vnd.nicholasdw.v1+json',
+      Accept: 'application/json',
       'Content-Type': 'application/json',
       'X-Requested-With': 'Fetch API',
     },

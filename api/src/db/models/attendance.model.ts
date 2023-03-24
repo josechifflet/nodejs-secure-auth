@@ -16,12 +16,12 @@ import { User } from './user.model';
 @Entity({ name: 'attendance' })
 export class Attendance {
   @PrimaryGeneratedColumn()
-  attendancePK: number;
+  PK: number;
 
   @Field(() => ID)
   @Column({ unique: true })
   @Generated('uuid')
-  attendanceID: string;
+  ID: string;
 
   @Field()
   @Column({ type: 'timestamptz' })
@@ -65,9 +65,9 @@ export class Attendance {
 
   @Field()
   @Column()
-  userPK: number;
+  PK: number;
 
   @ManyToOne(() => User, (user) => user.attendances)
-  @JoinColumn({ name: 'userPK' })
+  @JoinColumn({ name: 'PK' })
   user: User;
 }

@@ -44,7 +44,7 @@ const UserCard = ({ user }: Props) => {
   const deactivateUser = () => {
     axios({
       method: 'PATCH',
-      url: `/api/v1/users/${user.userID}`,
+      url: `/api/v1/users/${user.ID}`,
       data: { isActive: false },
     })
       .then(() => SuccessToast(toast, 'Successfully deactivated user.'))
@@ -58,7 +58,7 @@ const UserCard = ({ user }: Props) => {
   const reactivateUser = () => {
     axios({
       method: 'PATCH',
-      url: `/api/v1/users/${user.userID}`,
+      url: `/api/v1/users/${user.ID}`,
       data: { isActive: true },
     })
       .then(() => SuccessToast(toast, 'Successfully reactivated user.'))

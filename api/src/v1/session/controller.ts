@@ -22,15 +22,15 @@ class SessionControllerHandler {
     next: NextFunction
   ) => {
     const { id } = req.params;
-    const { userID } = req.session;
+    const { ID } = req.session;
 
-    if (!userID) {
+    if (!ID) {
       next(new AppError('No session detected. Please log in again.', 401));
       return;
     }
 
     // Validates whether the session belongs to the user or not.
-    const currentSessions = await CacheService.getUserSessions(userID);
+    const currentSessions = await CacheService.getUserSessions(ID);
     const mySess = currentSessions.some((sess) => sess.sid === id);
     if (!mySess) {
       next(new AppError('You do not have a session with that ID.', 404));

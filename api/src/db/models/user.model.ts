@@ -16,12 +16,12 @@ import { Attendance } from './attendance.model';
 @Entity({ name: 'user' })
 export class User {
   @PrimaryGeneratedColumn()
-  userPK: number;
+  PK: number;
 
   @Field(() => ID)
   @Column({ unique: true })
   @Generated('uuid')
-  userID: string;
+  ID: string;
 
   @Field()
   @Column({ unique: true })

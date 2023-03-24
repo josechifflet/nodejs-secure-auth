@@ -71,7 +71,7 @@ const EditUserModal = ({ isOpen, onClose, user }: Props) => {
     // Make a HTTP request.
     axios({
       method: 'PATCH',
-      url: `/api/v1/users/${user.userID}`,
+      url: `/api/v1/users/${user.ID}`,
       data: {
         email,
         fullName,
