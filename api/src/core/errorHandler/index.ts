@@ -1,7 +1,7 @@
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import type { NextFunction, Request, Response } from 'express';
 import { ValidationError } from 'express-validation';
 import { errors as jose } from 'jose';
+import { TypeORMError } from 'typeorm';
 
 import config from '../../config';
 import AppError from '../../util/app-error';
@@ -43,7 +43,7 @@ const handleOperationalErrors = (err: Error) => {
   }
 
   // Handle Prisma errors.
-  if (err instanceof PrismaClientKnownRequestError) {
+  if (err instanceof TypeORMError) {
     return new AppError(
       'Your request violates the constraints of the database. Please insert another data!',
       400
@@ -79,7 +79,7 @@ const handleOperationalErrors = (err: Error) => {
   }
 
   if (err instanceof jose.JWTExpired) {
-    return new AppError('MFA session expired. Please log in again!', 401);
+    return new AppError('Session expired. Please log in again!', 401);
   }
 
   // If anything is not caught, then it is most likely an unknown error. We will

@@ -23,15 +23,15 @@ const session = () => (req: Request, res: Response, next: NextFunction) => {
 
   // Use '__Host-' prefix on cookie name in production.
   const cookie = isHTTPS(req)
-    ? `__Host-${config.SESSION_COOKIE}`
-    : config.SESSION_COOKIE;
+    ? `__Host-${config.SESSION_NAME}`
+    : config.SESSION_NAME;
 
   return expressSession({
     store: new TypeormStore({ repository: db.repositories.session }),
     name: cookie,
     saveUninitialized: false,
     resave: false,
-    secret: config.COOKIE_SECRET,
+    secret: config.SESSION_SECRET,
     cookie: options,
   })(req, res, next);
 };

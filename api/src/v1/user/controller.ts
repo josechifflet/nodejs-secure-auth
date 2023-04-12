@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 
-import { CacheService } from '../../core/cache/service';
+import { db } from '../../db';
 import { services } from '../../services';
 import AppError from '../../util/app-error';
 import sendResponse from '../../util/send-response';
@@ -22,7 +22,8 @@ class UserControllerHandler {
     res: Response,
     next: NextFunction
   ) => {
-    const { username, email, phoneNumber, password, fullName, role } = req.body;
+    const { username, email, phoneNumber, password, name, lastname, role } =
+      req.body;
 
     // Validates whether the username or email or phone is already used or not. Use
     // parallel processing for speed.
@@ -57,7 +58,7 @@ class UserControllerHandler {
       password,
       totpSecret: '', // Filled by the function
       role, // optional, defaults to 'user'
-      fullName,
+      fullName: name + ' ' + lastname,
     });
 
     sendResponse({
@@ -85,23 +86,22 @@ class UserControllerHandler {
   ) => {
     const { id } = req.params;
 
-    if (!(await services.user.getUser({ ID: id }))) {
+    const user = await services.user.getUserComplete({
+      ID: id,
+    });
+    if (!user) {
       next(new AppError('The user with this ID does not exist!', 404));
       return;
     }
 
     await services.user.updateUser({ ID: id }, { isActive: false });
 
-    // Delete all of their sessions.
-    req.session.destroy(async (err) => {
-      if (err) {
-        next(new AppError('Failed to log out. Please try again.', 500));
-        return;
-      }
-
-      await CacheService.deleteUserSessions(id);
-      res.status(204).send();
+    await db.repositories.session.delete({
+      id: user.ID,
     });
+
+    res.status(204).send();
+    return;
   };
 
   /**
@@ -118,30 +118,22 @@ class UserControllerHandler {
   ) => {
     const { id } = req.params;
 
-    if (!(await services.user.getUser({ ID: id }))) {
+    const user = await services.user.getUserComplete({
+      ID: id,
+    });
+    if (!user) {
       next(new AppError('The user with this ID does not exist!', 404));
       return;
     }
 
     await services.user.deleteUser({ ID: id });
 
-    // Delete all of their sessions.
-    if (req.session.ID !== id) {
-      await CacheService.deleteUserSessions(id);
-      res.status(204).send();
-      return;
-    }
-
     // This shouldn't happen, but let's say if an admin deletes themself...
-    req.session.destroy(async (err) => {
-      if (err) {
-        next(new AppError('Internal server error. Please try again.', 500));
-        return;
-      }
-
-      await CacheService.deleteUserSessions(id);
-      res.status(204).send();
+    await db.repositories.session.delete({
+      id: user.ID,
     });
+    res.status(204).send();
+    return;
   };
 
   /**
@@ -151,7 +143,11 @@ class UserControllerHandler {
    * @param res - Express.js's response object.
    */
   public getUser = async (req: Request, res: Response) => {
-    const user = await services.user.getUser({ ID: req.params.id });
+    const { ID } = req.session;
+
+    const user = await services.user.getUser({
+      ID,
+    });
 
     sendResponse({
       req,
@@ -197,18 +193,22 @@ class UserControllerHandler {
     res: Response,
     next: NextFunction
   ) => {
-    const { username, email, phoneNumber, password, fullName, role, isActive } =
-      req.body;
-    const { id } = req.params;
+    const {
+      username,
+      email,
+      phoneNumber,
+      password,
+      role,
+      isActive,
+      name,
+      lastname,
+    } = req.body;
+    const { ID } = req.session;
 
     // Validate everything via 'Promise.all' for speed.
-    const [userByID, userByUsername, userByEmail, userByPhone] =
-      await Promise.all([
-        services.user.getUser({ ID: id }),
-        username ? services.user.getUser({ username }) : null,
-        email ? services.user.getUser({ email }) : null,
-        phoneNumber ? services.user.getUser({ phoneNumber }) : null,
-      ]);
+    const userByID = services.user.getUser({
+      ID: ID,
+    });
 
     // Perform validations.
     if (!userByID) {
@@ -216,32 +216,17 @@ class UserControllerHandler {
       return;
     }
 
-    if (userByUsername && userByUsername.ID !== id) {
-      next(new AppError('This username has been used by another user!', 400));
-      return;
-    }
-
-    if (userByEmail && userByEmail.ID !== id) {
-      next(new AppError('This email has been used by another user!', 400));
-      return;
-    }
-
-    if (userByPhone && userByPhone.ID !== id) {
-      next(new AppError('This number has been used by another user!', 400));
-      return;
-    }
-
     // Everything is optional and sanitized according to the previous validation layer.
     const user = await services.user.updateUser(
-      { ID: id },
+      { ID: ID },
       {
         username,
         email,
         phoneNumber,
-        fullName,
         password,
         role,
         isActive,
+        fullName: name + ' ' + lastname,
       }
     );
 

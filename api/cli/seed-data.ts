@@ -15,8 +15,8 @@ async function loadData() {
       phoneNumber: '0823-1122-3344',
       password: await hashPassword('test1234'),
       totpSecret: '1234',
-      fullName: 'Admin Attendance',
-      role: 'admin',
+      name: 'Admin',
+      fullName: 'Admin',
     },
   ];
 }

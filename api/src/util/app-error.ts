@@ -37,8 +37,10 @@ class AppError extends Error {
    */
   public type: string;
 
-  constructor(message: string, statusCode: number) {
-    super(message);
+  constructor(message: string | Record<string, unknown>, statusCode: number) {
+    super(
+      message instanceof Object ? JSON.stringify(message) : message.toString()
+    );
 
     this.id = nanoid();
     this.title = getReasonPhrase(statusCode);

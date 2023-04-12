@@ -65,9 +65,9 @@ export class Attendance {
 
   @Field()
   @Column()
-  PK: number;
+  userPK: number;
 
   @ManyToOne(() => User, (user) => user.attendances)
-  @JoinColumn({ name: 'PK' })
+  @JoinColumn({ name: 'userPK' })
   user: User;
 }

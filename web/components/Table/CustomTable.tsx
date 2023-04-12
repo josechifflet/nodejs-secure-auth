@@ -1,21 +1,21 @@
-import { memo, useState } from 'react';
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Icon,
-} from '@chakra-ui/react';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
   SearchIcon,
 } from '@chakra-ui/icons';
+import {
+  Icon,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from '@chakra-ui/react';
+import { memo, useState } from 'react';
 
 type Row = {
   id: number;
@@ -37,7 +37,6 @@ const CustomTable = ({
 }: Props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
-  const totalPages = Math.ceil(data.length / rowsPerPage);
 
   const handlePrevPage = () => {
     setCurrentPage((prevPage) => prevPage - 1);
@@ -52,6 +51,7 @@ const CustomTable = ({
     setCurrentPage(1);
   };
 
+  const totalPages = Math.ceil(data.length / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
   const currentRows = data

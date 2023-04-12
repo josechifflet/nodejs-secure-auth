@@ -57,22 +57,27 @@ const LoginForm = () => {
   };
 
   return (
-    <Form title="Iniciar sesión" description="" error={error} onSubmit={login}>
+    <Form
+      title="Login"
+      description="Use your Attendance account"
+      error={error}
+      onSubmit={login}
+    >
       <TextInput
-        label="Usuario/email"
-        placeholder="Nombre de usuario o email asociado"
+        label="Username/E-mail/Phone"
+        placeholder="Username, email, or phone number"
         value={username}
         setValue={setUsername}
-        helper=""
+        helper="The username, email, or phone (with dashes) which you used to register"
         type="text"
       />
 
       <TextInput
-        label="Contraseña"
+        label="Password"
         placeholder="••••••••••"
         value={password}
         setValue={setPassword}
-        helper=""
+        helper="The password that you used to register"
         type={showPassword ? 'text' : 'password'}
       />
 
@@ -82,14 +87,19 @@ const LoginForm = () => {
         onChange={(e) => setShowPassword(e.target.checked)}
         isChecked={showPassword}
       >
-        <Text fontSize="sm">Ver contraseña</Text>
+        <Text fontSize="sm">Show password</Text>
       </Checkbox>
 
       <FormLinks
         routes={[
           {
+            href: routes.register,
+            text: 'Not yet registered? Create an account!',
+            color: 'orange.400',
+          },
+          {
             href: routes.resetPassword,
-            text: 'Olvidaste tu contraseña?',
+            text: 'Forgot your password? Reset it here!',
             color: 'red.400',
           },
         ]}
@@ -99,7 +109,7 @@ const LoginForm = () => {
         Icon={FaKey}
         inputs={[username, password]}
         isLoading={isLoading}
-        text="Iniciar sesión"
+        text="Log in"
       />
     </Form>
   );

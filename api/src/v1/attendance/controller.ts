@@ -34,7 +34,9 @@ class AttendanceControllerHandler {
     // If 'req.params' is not null, it means that we're trying to get the attendance
     // data of a single user instead of getting all attendance data.
     if (id) {
-      const user = await services.user.getUserComplete({ ID: id });
+      const user = await services.user.getUserComplete({
+        ID: id,
+      });
       if (!user) {
         next(new AppError('No user found with that ID.', 404));
         return;
@@ -87,7 +89,9 @@ class AttendanceControllerHandler {
       return;
     }
 
-    const user = await services.user.getUserComplete({ ID });
+    const user = await services.user.getUserComplete({
+      ID,
+    });
     if (!user) {
       next(new AppError('User with this ID is not found.', 404));
       return;
@@ -164,7 +168,9 @@ class AttendanceControllerHandler {
     }
 
     // Gets complete user.
-    const user = await services.user.getUserComplete({ ID });
+    const user = await services.user.getUserComplete({
+      ID,
+    });
     if (!user) {
       next(new AppError('User does not exist in the database!', 400));
       return;
@@ -223,7 +229,9 @@ class AttendanceControllerHandler {
     }
 
     // Gets complete user.
-    const user = await services.user.getUserComplete({ ID });
+    const user = await services.user.getUserComplete({
+      ID,
+    });
     if (!user) {
       next(new AppError('User does not exist in the database!', 400));
       return;

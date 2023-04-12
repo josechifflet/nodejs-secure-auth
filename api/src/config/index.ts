@@ -14,7 +14,7 @@ const isProd = process.env.NODE_ENV === 'production';
  */
 const config = {
   // Cookie.
-  COOKIE_SECRET: get('COOKIE_SECRET').default('secretvalue').asString(),
+  SESSION_SECRET: get('SESSION_SECRET').default('secretvalue').asString(),
 
   DB_DATABASE: get('DB_DATABASE').required().asString(),
   DB_HOST: get('DB_HOST').required().asString(),
@@ -50,7 +50,7 @@ const config = {
   // Environment.
   NODE_ENV: get('NODE_ENV')
     .default('development')
-    .asEnum(['development', 'production']),
+    .asEnum(['development', 'production', 'test']),
 
   // Redis.
   REDIS_HOST: get('REDIS_HOST').default('localhost').asString(),
@@ -61,10 +61,12 @@ const config = {
   PORT: get('PORT').default(8080).asPortNumber(),
 
   // Session cookie name.
-  SESSION_COOKIE: get('SESSION_COOKIE').default('connect.sid').asString(),
+  SESSION_NAME: get('SESSION_NAME').default('connect.sid').asString(),
 
   // Issuer of the TOTP.
   TOTP_ISSUER: get('TOTP_ISSUER').default('Dev').asString(),
+
+  TELEGRAM_BOT_TOKEN: get('TELEGRAM_BOT_TOKEN').required().asString(),
 };
 
 export default Object.freeze(config);

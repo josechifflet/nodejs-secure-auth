@@ -11,5 +11,3 @@ declare module 'express-session' {
     signedIn: string;
   }
 }
-
-export {};

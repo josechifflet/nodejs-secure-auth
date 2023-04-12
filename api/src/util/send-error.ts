@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 
 import AppError from './app-error';
+import { isJsonString } from './string';
 
 /**
  * Options object parameters.
@@ -24,7 +25,9 @@ const sendError = ({ req, res, error, stack = undefined }: Params) =>
     statusCode: error.statusCode,
     id: error.id,
     title: error.title,
-    message: error.message,
+    message: isJsonString(error.message)
+      ? JSON.parse(error.message)
+      : { text: error.message },
     source: {
       pointer: `${req.protocol}://${req.hostname}${req.originalUrl}`,
     },

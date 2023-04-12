@@ -10,10 +10,10 @@
   "files": ["src/index.ts", "./extensions.d.ts"],
   "compilerOptions": {
     /* Basic Options */
-    "target": "ES2021",
+    "target": "es2022",
     "module": "CommonJS",
     "outDir": "./dist",
-    "lib": ["es2021"],
+    "lib": ["es2022"],
     "removeComments": true,
     "isolatedModules": true,
 
@@ -40,6 +40,15 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["./src/**/*.ts", "./**/*.ts"], 
-  "exclude": ["node_modules"]
+  "include": [
+    "./src/**/*.{ts,mts}",
+    "./src/**/*.{js,mts}",
+    "./src/**/**/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "./src/__tests__",
+    "./src/__tests__setup__",
+    "./src/__tests__suites__"
+  ]
 }

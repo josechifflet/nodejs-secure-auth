@@ -20,7 +20,7 @@ const AttendanceRouter = () => {
   const userAttendanceRateLimit = rateLimit(100, 'attendance-me');
   const attendanceRateLimit = rateLimit(15, 'attendance-check');
 
-  // Endpoints are only for authenticated users,
+  // Endpoints are only for authenticated users
   router.use(asyncHandler(hasSession));
 
   // Check out current day status. Almost never blocked by rate limiter.

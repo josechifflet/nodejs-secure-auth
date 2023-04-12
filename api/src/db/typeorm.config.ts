@@ -15,7 +15,7 @@ export const dbDataSource = new DataSource({
   synchronize: true,
   logging: ['error', 'warn', 'migration'],
   entities: [path.resolve(__dirname, 'models/*.model{.js,.ts}')],
-  migrations: [path.resolve(__dirname, 'migrations/*{.js,.ts}')],
+  migrations: [path.resolve(__dirname, 'migrations/**/index*{.js,.ts}')],
   connectTimeoutMS: 10000,
   ssl: NODE_ENV === 'production',
   installExtensions: true,

@@ -41,7 +41,9 @@ class AuthControllerHandler {
       }
 
       // Make sure that the user exists in the database.
-      const user = await services.user.getUser({ ID: req.session.ID });
+      const user = await services.user.getUserComplete({
+        ID: req.session.ID,
+      });
 
       if (!user) {
         this.sendUserStatus(req, res, false, false, null);
@@ -280,22 +282,6 @@ class AuthControllerHandler {
         return;
       }
 
-      // Clears all session from cookie.
-      setCookie({
-        req,
-        res,
-        name: config.SESSION_COOKIE,
-        value: 'loggedOut',
-        maxAge: 10,
-      });
-      setCookie({
-        req,
-        res,
-        name: config.JWT_COOKIE_NAME,
-        value: 'loggedOut',
-        maxAge: 10,
-      });
-
       sendResponse({
         req,
         res,
@@ -317,7 +303,7 @@ class AuthControllerHandler {
    * @param next - Express.js's next function.
    */
   public register = async (req: Request, res: Response, next: NextFunction) => {
-    const { username, email, phoneNumber, password, fullName } = req.body;
+    const { username, email, phoneNumber, password, name, lastname } = req.body;
 
     // Validates whether the username or email or phone is already used or not. Use
     // parallel processing for speed.
@@ -355,7 +341,7 @@ class AuthControllerHandler {
       confirmationCode,
       forgotPasswordCode: undefined,
       isActive: true,
-      fullName,
+      fullName: `${name} ${lastname}`,
     });
 
     // link to confirm email
@@ -467,7 +453,7 @@ class AuthControllerHandler {
     }
 
     // Check the availability of the user.
-    const user = await services.user.getUserComplete({ ID });
+    const user = await services.user.getUserComplete({ ID: ID });
     if (!user) {
       next(new AppError('User with this ID does not exist!', 404));
       return;
@@ -537,7 +523,7 @@ class AuthControllerHandler {
     }
 
     // Fetch current user.
-    const user = await services.user.getUserComplete({ ID });
+    const user = await services.user.getUserComplete({ ID: ID });
     if (!user) {
       next(new AppError('There is no user with that ID.', 404));
       return;
@@ -546,7 +532,7 @@ class AuthControllerHandler {
     // Regenerate new MFA secret.
     const newSecret = await nanoid();
     const totp = generateDefaultTOTP(user.username, newSecret);
-    await services.user.updateUser({ ID }, { totpSecret: newSecret });
+    await services.user.updateUser({ ID: ID }, { totpSecret: newSecret });
 
     // Send response.
     sendResponse({
@@ -583,7 +569,7 @@ class AuthControllerHandler {
     }
 
     // Fetch old data.
-    const user = await services.user.getUserComplete({ ID });
+    const user = await services.user.getUserComplete({ ID: ID });
     if (!user) {
       next(new AppError('There is no user with that ID.', 404));
       return;
@@ -603,7 +589,7 @@ class AuthControllerHandler {
     }
 
     // Update new password.
-    await services.user.updateUser({ ID }, { password: newPassword });
+    await services.user.updateUser({ ID: ID }, { password: newPassword });
 
     // Send a confirmation email that the user has successfully changed their password.
     await new Email(user.email, user.fullName).sendUpdatePassword();
@@ -725,7 +711,7 @@ class AuthControllerHandler {
     }
 
     // Check whether username exists.
-    const user = await services.user.getUserComplete({ ID: username });
+    const user = await services.user.getUserComplete({ username });
     if (!user) {
       this.invalidBasicAuth('User with that ID is not found.', 404, res, next);
       return;
@@ -781,7 +767,11 @@ class AuthControllerHandler {
 
     // Generate JWS as the authorization ticket.
     const jti = await nanoid();
-    const token = await signJWS(jti, user.ID);
+    const token = await signJWS(
+      jti,
+      user.ID,
+      /** expiration 1 month */ 2592000000
+    );
 
     // Set OTP session by its JTI.
     await CacheService.setOTPSession(jti, user.ID);

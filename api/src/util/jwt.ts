@@ -1,23 +1,48 @@
 import type { Request } from 'express';
 import type { JWTHeaderParameters, JWTPayload, JWTVerifyOptions } from 'jose';
 import { importPKCS8, importSPKI, jwtVerify, SignJWT } from 'jose';
+import { z } from 'zod';
 
 import config from '../config';
-import isHTTPS from './is-https';
+import AppError from './app-error';
+
+/**
+ * Json Web Tokens Payload validator.
+ *
+ * @param jwtPayload - JWTPayload to validate.
+ * @returns validated JWTPayload object.
+ */
+export const validateJWTPayload = (jwtPayload: JWTPayload) => {
+  const JWTPayloadDataSchema = z.object({
+    aud: z.string(),
+    exp: z.number(),
+    iat: z.number(),
+    iss: z.string(),
+    jti: z.string(),
+    nbf: z.number(),
+    sub: z.string(),
+  });
+  const validateJWTPayload = JWTPayloadDataSchema.safeParse(jwtPayload);
+  if (!validateJWTPayload.success)
+    throw new AppError('Invalid JWTPayload!', 401);
+
+  return validateJWTPayload.data;
+};
 
 /**
  * Signs a JWT token with EdDSA algorithm, will transform the JWT into JWS.
  *
  * @param jti - Random JSON Token Identifier.
  * @param ID - A user ID.
+ * @param expiration - minutes.
  * @returns Signed JWS.
  */
-export const signJWS = async (jti: string, ID: string) => {
+export const signJWS = async (jti: string, ID: string, expiration: number) => {
   const privateKey = await importPKCS8(config.JWT_PRIVATE_KEY, 'EdDSA');
 
   const payload: JWTPayload = {
     aud: config.JWT_AUDIENCE,
-    exp: Math.floor(Date.now() / 1000) + 900, // 15 minutes
+    exp: Math.floor(Date.now() / 1000) + expiration,
     iat: Math.floor(Date.now() / 1000),
     iss: config.JWT_ISSUER,
     jti,
@@ -52,7 +77,7 @@ export const verifyToken = async (token: string) => {
 };
 
 /**
- * Extracts a token from either Authorization header or signed cookie.
+ * Extracts a token from either Authorization header.
  * Will prioritize token from Authorization header.
  *
  * @param req - Express.js's request object.
@@ -65,11 +90,22 @@ export const extractJWT = (req: Request) => {
     return authorization.split(' ')[1];
   }
 
-  // If using signed cookies, then add `__Host' prefix if applicable.
-  if (isHTTPS(req)) {
-    const cookie = `__Host-${config.JWT_COOKIE_NAME}`;
-    return req.signedCookies[cookie];
-  }
+  return authorization;
+};
 
-  return req.signedCookies[config.JWT_COOKIE_NAME];
+/**
+ * Extracts a token from a given header by parameter.
+ *
+ * @param req - Express.js's request object.
+ * @returns Extracted JWT token.
+ */
+export const extractJWTFromHeader = (req: Request, header: string) => {
+  const jwt = req.headers[header];
+
+  const validateJWTInHeader = z.string();
+  const validatedJWT = validateJWTInHeader.safeParse(jwt);
+
+  if (validatedJWT.success) return validatedJWT.data;
+
+  return undefined;
 };

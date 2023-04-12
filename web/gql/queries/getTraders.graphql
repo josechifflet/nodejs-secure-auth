@@ -1,0 +1,12 @@
+query GetTraders($page: Float!, $take: Float!, $param: String) {
+  traders(page: $page, take: $take, param: $param) {
+    data {
+      ID
+    }
+    count
+    currentPage
+    lastPage
+    nextPage
+    prevPage
+  }
+}

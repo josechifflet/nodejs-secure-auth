@@ -1,12 +1,14 @@
-/**
- * @type {import('next').NextConfig}
- */
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   // Proxy to back-end in development mode.
   async rewrites() {
     return process.env.NGINX
       ? []
       : [
+          {
+            source: '/graphql',
+            destination: 'http://localhost:8080/graphql',
+          },
           {
             source: '/api/:path*',
             destination: 'http://localhost:8080/api/:path*',
@@ -48,10 +50,6 @@ const nextConfig = {
 
   // Enable React Strict Mode.
   reactStrictMode: true,
-
-  images: {
-    domains: ['placekitten.com'],
-  },
 };
 
 module.exports = nextConfig;

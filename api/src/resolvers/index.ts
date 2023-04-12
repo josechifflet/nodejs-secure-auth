@@ -1,4 +1,5 @@
 import { CacheResolver } from './cache';
-import { StudentResolver } from './student';
+import { SymbolResolver } from './symbols';
+import { TraderResolver } from './trader';
 
-export const resolvers = [StudentResolver, CacheResolver];
+export const resolvers = [TraderResolver, CacheResolver, SymbolResolver];

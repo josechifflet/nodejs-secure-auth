@@ -1,9 +1,9 @@
 import attendance from './attendance';
-import student from './student';
+import trader from './trader';
 import user from './user';
 
 export const services = {
   attendance,
   user,
-  student,
+  trader,
 };

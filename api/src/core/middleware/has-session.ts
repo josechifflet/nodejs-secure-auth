@@ -12,7 +12,7 @@ import getDeviceID from '../../util/device-id';
  * @param _ - Express.js's response object.
  * @param next - Express.js's next function.
  */
-const hasSession = async (req: Request, _: Response, next: NextFunction) => {
+const hasSession = async (req: Request, _res: Response, next: NextFunction) => {
   const { ID } = req.session;
 
   // Validates whether the session exists or not.
@@ -22,7 +22,7 @@ const hasSession = async (req: Request, _: Response, next: NextFunction) => {
   }
 
   // Check in an unlikely scenario: a user has already deleted his account but their session is still active.
-  const user = await services.user.getUser({ ID });
+  const user = await services.user.getUser({ ID: ID });
   if (!user) {
     next(new AppError('User belonging to this session does not exist.', 400));
     return;
@@ -34,9 +34,12 @@ const hasSession = async (req: Request, _: Response, next: NextFunction) => {
     return;
   }
 
+  const lastActive = Date.now().toString();
+  const sessionInfo = getDeviceID(req);
+
   // Refresh session data to contain the new session information.
-  req.session.lastActive = Date.now().toString();
-  req.session.sessionInfo = getDeviceID(req);
+  req.session.lastActive = lastActive;
+  req.session.sessionInfo = sessionInfo;
 
   // Go to the next middleware.
   next();

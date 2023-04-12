@@ -25,4 +25,10 @@ const logger = winston.createLogger({
   exitOnError: false,
 });
 
+logger.add(
+  new winston.transports.Console({
+    format: winston.format.simple(),
+  })
+);
+
 export default logger;

@@ -3,23 +3,43 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-"""
-The javascript `Date` as string. Type represents date and time as the ISO Date string.
-"""
-scalar DateTime
+type PaginatedTraderResponse {
+  count: Int!
+  currentPage: Int!
+  data: [Trader!]!
+  lastPage: Int!
+  nextPage: Int
+  prevPage: Int
+}
 
 type Query {
   getCacheByKey(key: String!, time: Float!): String
-  users(limit: Float, offset: Float): [Student!]!
+  symbols: [Symbol!]!
+  traders(page: Float!, param: String, take: Float!): PaginatedTraderResponse!
 }
 
-type Student {
-  birthday: DateTime
-  document: String!
-  email: String!
-  firstName: String!
-  generation: Float!
-  lastName: String!
-  sex: String!
-  ID: ID!
+type Symbol {
+  ID: String!
+  PK: ID!
+  symbol: String!
+}
+
+type Trader {
+  ID: String!
+  PK: ID!
+  encryptedUid: String!
+  followerCount: Float!
+  futureUid: String
+  isTwTrader: Boolean
+  nickName: String
+  openId: String
+  pnl: Float!
+  positionShared: Boolean!
+  rank: Float!
+  roi: Float!
+  tradeType: String
+  twShared: String
+  twitterUrl: String
+  updateTime: String!
+  userPhotoUrl: String
 }

@@ -1,7 +1,6 @@
 import { Router } from 'express';
 
 import bodyParser from '../../core/middleware/body-parser';
-import getMe from '../../core/middleware/get-me';
 import hasJWT from '../../core/middleware/has-jwt';
 import hasRole from '../../core/middleware/has-role';
 import hasSession from '../../core/middleware/has-session';
@@ -32,14 +31,13 @@ const UserRouter = () => {
   router
     .use(userRateLimit)
     .route('/me')
-    .get(getMe, asyncHandler(UserController.getUser))
+    .get(asyncHandler(UserController.getUser))
     .patch(
-      getMe,
       bodyParser,
       validate(UserValidation.updateMe),
       asyncHandler(UserController.updateUser)
     )
-    .delete(getMe, asyncHandler(UserController.deactivateUser));
+    .delete(asyncHandler(UserController.deactivateUser));
 
   // Restrict endpoints for admins who are logged in and authenticated with MFA.
   router.use(

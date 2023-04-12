@@ -43,8 +43,8 @@ const ForgotPasswordForm = () => {
 
   return (
     <Form
-      title="Forgot Password"
-      description="Reset your Attendance Account"
+      title="Olvide mi contraseña"
+      description="Restablece tu contraseña de tu cuenta."
       error={error}
       onSubmit={resetPassword}
     >
@@ -53,7 +53,7 @@ const ForgotPasswordForm = () => {
         placeholder="Username"
         value={username}
         setValue={setUsername}
-        helper="The username that you used to register"
+        helper=""
         type="text"
       />
 
@@ -62,20 +62,15 @@ const ForgotPasswordForm = () => {
         placeholder="ran@gmail.com"
         value={email}
         setValue={setEmail}
-        helper="The email associated with that username"
+        helper="El email asociado a tu cuenta."
         type="email"
       />
 
       <FormLinks
         routes={[
           {
-            href: routes.register,
-            text: 'Not yet registered? Create an account!',
-            color: 'orange.400',
-          },
-          {
             href: routes.login,
-            text: 'Remembered your password? Log in!',
+            text: 'Recuerdas tu contraseña? Inicia sesión.',
             color: 'blue.400',
           },
         ]}
@@ -85,7 +80,7 @@ const ForgotPasswordForm = () => {
         Icon={FaLockOpen}
         inputs={[username, email]}
         isLoading={isLoading}
-        text="Reset password"
+        text="Restablecer contraseña"
       />
     </Form>
   );
